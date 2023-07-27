@@ -74,3 +74,9 @@ func CheckUser(user models.UserBody) (models.User, error) {
 	log.Println("rows", result)
 	return result, row.Error
 }
+
+func GetType(product models.Product) []models.Product {
+	var result []models.Product
+	db.Find(&result, "type = ?", product.Type)
+	return result
+}

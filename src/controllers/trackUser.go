@@ -73,7 +73,7 @@ func CheckUser(ctx *gin.Context) {
 	})
 }
 
-func NewProduct(ctx *gin.Context){
+func NewProduct(ctx *gin.Context) {
 	fmt.Println("Track check user controller")
 	var product models.Product
 	err := ctx.Bind(&product)
@@ -84,16 +84,33 @@ func NewProduct(ctx *gin.Context){
 		})
 		return
 	}
-	err= db.AddProduct(product) 
-	if err != nil{
+	err = db.AddProduct(product)
+	if err != nil {
 		fmt.Println("error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Error from DB",
 		})
 		return
 	}
-		ctx.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Status OK",
 	})
 
+}
+
+func GetRecommendations(ctx *gin.Context) {
+	var product models.Product
+	err := ctx.Bind(&product)
+	if err != nil {
+		fmt.Println("error", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Check your req body",
+		})
+		return
+	}
+	products := db.GetType(product)
+	ctx.JSON(http.StatusOK, gin.H{
+		"message":  "Status OK",
+		"products": products,
+	})
 }
